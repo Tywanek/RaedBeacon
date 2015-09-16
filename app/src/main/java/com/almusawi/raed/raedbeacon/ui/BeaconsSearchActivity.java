@@ -16,6 +16,7 @@ import com.almusawi.raed.raedbeacon.RaedBeaconApplication;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.estimote.sdk.Utils;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public class BeaconsSearchActivity extends Activity {
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            if(beacons.size()>0 && !((RaedBeaconApplication)getApplicationContext()).isDetailsVisible() ){
+            if(beacons.size()>0 && !((RaedBeaconApplication)getApplicationContext()).isDetailsVisible() && (Utils.computeAccuracy(beacons.get(0))<0.5) ){
               ((RaedBeaconApplication)getApplicationContext()).setDetailsVisible(true);
               intent.putExtra(BeaconsSearchActivity.FOUND_BEACON, beacons.get(0));
               startActivity(intent);
