@@ -14,7 +14,6 @@ import com.almusawi.raed.raedbeacon.RaedBeaconApplication;
 import com.almusawi.raed.raedbeacon.settings.BeaconList;
 import com.almusawi.raed.raedbeacon.settings.SoundRecord;
 import com.estimote.sdk.Beacon;
-import com.estimote.sdk.Utils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,9 +60,6 @@ public class DetailActivity extends Activity {
                 soundRecord.onPlay(true);
             }
         });
-        TextView test = (TextView)findViewById(R.id.test);
-        double floay = Utils.computeAccuracy(myActiveBeacon);
-        test.setText(""+floay);
     }
 
     @Override
@@ -77,11 +73,16 @@ public class DetailActivity extends Activity {
             @Override
             public void run() {
                 soundRecord.onPlay(false);
-                ((Activity)context).finish();
+                returnResult();
             }
         };
         timer = new Timer();
         timer.schedule(timerTask, TIME_DELAY);
+    }
+
+    private void returnResult(){
+        setResult(RESULT_OK);
+        finish();
     }
 
 }

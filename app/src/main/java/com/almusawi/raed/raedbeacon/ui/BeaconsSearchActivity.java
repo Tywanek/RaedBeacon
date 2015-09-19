@@ -20,6 +20,8 @@ import com.estimote.sdk.Utils;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class BeaconsSearchActivity extends Activity {
@@ -30,6 +32,12 @@ public class BeaconsSearchActivity extends Activity {
   private BeaconManager beaconManager;
   private CircleProgressBar circleProgressBar;
   public static String FOUND_BEACON = "FOUND_BEACON";
+  private static final long TIME_DELAY = 60000;
+  public static final int DETAIL_ACTIVITY = 100;
+
+  private boolean timerFinish = true;
+  private Timer timer;
+  private TimerTask timerTask;
 
 
   @Override
@@ -61,10 +69,12 @@ public class BeaconsSearchActivity extends Activity {
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            if(beacons.size()>0 && !((RaedBeaconApplication)getApplicationContext()).isDetailsVisible() && (Utils.computeAccuracy(beacons.get(0))<0.5) ){
-              ((RaedBeaconApplication)getApplicationContext()).setDetailsVisible(true);
+            if (beacons.size() > 0 && !((RaedBeaconApplication) getApplicationContext()).isDetailsVisible()
+                    && (Utils.computeAccuracy(beacons.get(0)) < 0.5 && timerFinish)) {
+              ((RaedBeaconApplication) getApplicationContext()).setDetailsVisible(true);
               intent.putExtra(BeaconsSearchActivity.FOUND_BEACON, beacons.get(0));
-              startActivity(intent);
+              //startActivity(intent);
+              startActivityForResult(intent, DETAIL_ACTIVITY);
             }
 
           }
@@ -73,6 +83,17 @@ public class BeaconsSearchActivity extends Activity {
     });
   }
 
+  public void startDelayTimer(){
+    timerFinish = false;
+    timerTask = new TimerTask() {
+      @Override
+      public void run() {
+        timerFinish = true;
+      }
+    };
+    timer = new Timer();
+    timer.schedule(timerTask, TIME_DELAY);
+  }
 
   @Override
   protected void onDestroy() {
@@ -121,6 +142,12 @@ public class BeaconsSearchActivity extends Activity {
         connectToService();
       } else {
         //Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
+      }
+    }
+    if(requestCode == DETAIL_ACTIVITY){
+      if (resultCode == Activity.RESULT_OK){
+        Toast.makeText(this, "Start timer now", Toast.LENGTH_SHORT).show();
+        startDelayTimer();
       }
     }
     super.onActivityResult(requestCode, resultCode, data);
