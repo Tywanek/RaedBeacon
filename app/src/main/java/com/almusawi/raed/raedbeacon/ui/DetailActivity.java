@@ -82,6 +82,7 @@ public class DetailActivity extends Activity {
 
     private void returnResult(){
         setResult(RESULT_OK);
+        timer.cancel();
         finish();
     }
 

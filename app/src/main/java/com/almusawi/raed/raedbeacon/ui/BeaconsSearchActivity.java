@@ -89,6 +89,7 @@ public class BeaconsSearchActivity extends Activity {
       @Override
       public void run() {
         timerFinish = true;
+        timer.cancel();
       }
     };
     timer = new Timer();
