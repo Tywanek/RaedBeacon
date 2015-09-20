@@ -32,7 +32,7 @@ public class BeaconsSearchActivity extends Activity {
   private BeaconManager beaconManager;
   private CircleProgressBar circleProgressBar;
   public static String FOUND_BEACON = "FOUND_BEACON";
-  private static final long TIME_DELAY = 60000;
+  private static final long TIME_DELAY = 15000;
   public static final int DETAIL_ACTIVITY = 100;
 
   private boolean timerFinish = true;
@@ -70,7 +70,7 @@ public class BeaconsSearchActivity extends Activity {
           @Override
           public void run() {
             if (beacons.size() > 0 && !((RaedBeaconApplication) getApplicationContext()).isDetailsVisible()
-                    && (Utils.computeAccuracy(beacons.get(0)) < 0.5 && timerFinish)) {
+                    && (Utils.computeAccuracy(beacons.get(0)) < 1.5 && timerFinish)) {
               ((RaedBeaconApplication) getApplicationContext()).setDetailsVisible(true);
               intent.putExtra(BeaconsSearchActivity.FOUND_BEACON, beacons.get(0));
               //startActivity(intent);

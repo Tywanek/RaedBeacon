@@ -29,7 +29,7 @@ public class DetailActivity extends Activity {
     private Context context;
     private SoundRecord soundRecord = null;
 
-    private static final long TIME_DELAY = 6000;
+    private static final long TIME_DELAY = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
