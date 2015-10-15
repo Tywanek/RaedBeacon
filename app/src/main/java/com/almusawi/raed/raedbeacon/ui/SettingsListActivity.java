@@ -39,7 +39,6 @@ public class SettingsListActivity extends Activity {
   private CircleProgressBar circleProgressBar;
   private LinearLayout mainLayout, listLayout;
   private EditText pinInput;
-  private boolean isPinOk;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +49,7 @@ public class SettingsListActivity extends Activity {
     mainLayout.setBackground(getResources().getDrawable(R.drawable.min));
     listLayout = (LinearLayout)findViewById(R.id.listLayout);
     listLayout.setVisibility(View.GONE);
-    if(pinCodeCheck()){
-      listLayout.setVisibility(View.VISIBLE);
-      pinInput.setVisibility(View.GONE);
-    }
+    pinCodeCheck();
 
     //set ProgreBar
     circleProgressBar = (CircleProgressBar)findViewById(R.id.progress);
@@ -102,27 +98,30 @@ public class SettingsListActivity extends Activity {
     inputManager.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
   }
 
-  private boolean pinCodeCheck(){
-    isPinOk = false;
+  private void pinCodeCheck(){
     pinInput.setVisibility(View.VISIBLE);
     pinInput.setOnKeyListener(new View.OnKeyListener() {
-      public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+      @Override
+      public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
           Toast.makeText(SettingsListActivity.this, pinInput.getText(), Toast.LENGTH_SHORT).show();
-          if (pinInput.getText().toString().equals(UserPreferences.getUserPassword(getApplicationContext())))
-            isPinOk = true;
-          pinInput.setVisibility(View.GONE);
-          hideKeyboard();
-        }else if(UserPreferences.getUserPassword(getApplicationContext()).equals("")){
-          UserPreferences.setUserPassword(getApplicationContext(), pinInput.getText().toString());
-          pinInput.setVisibility(View.GONE);
-          hideKeyboard();
-          isPinOk = true;
-        }
-        return true;
-      }});
 
-    return isPinOk;
+          if (pinInput.getText().toString().equals(UserPreferences.getUserPassword(getApplicationContext()))){
+            pinInput.setVisibility(View.GONE);
+            listLayout.setVisibility(View.VISIBLE);
+            hideKeyboard();
+          }
+          if(UserPreferences.getUserPassword(getApplicationContext()).equals("")) {
+            UserPreferences.setUserPassword(getApplicationContext(), pinInput.getText().toString());
+            pinInput.setVisibility(View.GONE);
+            listLayout.setVisibility(View.VISIBLE);
+            hideKeyboard();
+          }
+        }
+        return false;
+      }
+    });
+
   }
 
   @Override
@@ -153,7 +152,7 @@ public class SettingsListActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
-    circleProgressBar.setVisibility(View.VISIBLE);
+      circleProgressBar.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -171,7 +170,7 @@ public class SettingsListActivity extends Activity {
       if (resultCode == Activity.RESULT_OK) {
         connectToService();
       } else {
-        //Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
       }
     }
     super.onActivityResult(requestCode, resultCode, data);
@@ -190,10 +189,10 @@ public class SettingsListActivity extends Activity {
       }
     });
   }
-
-  @Override
-  public void onBackPressed() {
-    super.onBackPressed();
-    startActivity(new Intent(this, BeaconsSearchActivity.class));
-  }
+//
+//  @Override
+//  public void onBackPressed() {
+//    startActivity(new Intent(this, BeaconsSearchActivity.class));
+//    finish();
+//  }
 }

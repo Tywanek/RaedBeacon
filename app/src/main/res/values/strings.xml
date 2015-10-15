@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AutismBaecons</string>
+    <string name="app_name">Let\'s play</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -13,5 +13,6 @@
     <string name="empty_file_name">Set beacon name</string>
     <string name="enter_beacon_name">Enter beacon name</string>
     <string name="enter_pin_code_hint">Enter pin code</string>
+    <string name="pin_error">Wrong pin</string>
     <string name="title_activity_main2">Main2Activity</string>
 </resources>
