@@ -2,17 +2,23 @@ package com.almusawi.raed.raedbeacon.ui;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.almusawi.raed.raedbeacon.MainActivity;
 import com.almusawi.raed.raedbeacon.R;
+import com.almusawi.raed.raedbeacon.UserPreferences;
 import com.almusawi.raed.raedbeacon.adapters.BeaconListAdapter;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -31,11 +37,24 @@ public class SettingsListActivity extends Activity {
   private BeaconManager beaconManager;
   private BeaconListAdapter adapter;
   private CircleProgressBar circleProgressBar;
+  private LinearLayout mainLayout, listLayout;
+  private EditText pinInput;
+  private boolean isPinOk;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
+    pinInput = (EditText)findViewById(R.id.myPinInput);
+    mainLayout = (LinearLayout)findViewById(R.id.mainLayout);
+    mainLayout.setBackground(getResources().getDrawable(R.drawable.min));
+    listLayout = (LinearLayout)findViewById(R.id.listLayout);
+    listLayout.setVisibility(View.GONE);
+    if(pinCodeCheck()){
+      listLayout.setVisibility(View.VISIBLE);
+      pinInput.setVisibility(View.GONE);
+    }
+
     //set ProgreBar
     circleProgressBar = (CircleProgressBar)findViewById(R.id.progress);
     circleProgressBar.setColorSchemeResources(R.color.purple);
@@ -77,6 +96,34 @@ public class SettingsListActivity extends Activity {
     });
   }
 
+  public void hideKeyboard() {
+    InputMethodManager inputManager = (InputMethodManager)
+            this.getSystemService(Context.INPUT_METHOD_SERVICE);
+    inputManager.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
+  }
+
+  private boolean pinCodeCheck(){
+    isPinOk = false;
+    pinInput.setVisibility(View.VISIBLE);
+    pinInput.setOnKeyListener(new View.OnKeyListener() {
+      public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+          Toast.makeText(SettingsListActivity.this, pinInput.getText(), Toast.LENGTH_SHORT).show();
+          if (pinInput.getText().toString().equals(UserPreferences.getUserPassword(getApplicationContext())))
+            isPinOk = true;
+          pinInput.setVisibility(View.GONE);
+          hideKeyboard();
+        }else if(UserPreferences.getUserPassword(getApplicationContext()).equals("")){
+          UserPreferences.setUserPassword(getApplicationContext(), pinInput.getText().toString());
+          pinInput.setVisibility(View.GONE);
+          hideKeyboard();
+          isPinOk = true;
+        }
+        return true;
+      }});
+
+    return isPinOk;
+  }
 
   @Override
   protected void onDestroy() {

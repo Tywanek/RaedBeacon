@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/abient">
+    android:id="@+id/mainLayout">
+
     <ImageView
         android:id="@+id/logo"
         android:padding="15dp"
@@ -13,17 +13,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
-        android:visibility="visible"
-        android:id="@+id/progress"
+    <EditText
+        android:id="@+id/myPinInput"
+        android:visibility="gone"
+        android:hint="@string/enter_pin_code_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:mlpb_progress_stoke_width="3dp"
-        android:layout_width="36dp"
-        android:layout_height="36dp"/>
-    <ListView
-        android:id="@+id/device_list"
+        android:inputType="numberPassword"
+        android:maxLength="4"/>
+
+    <LinearLayout
+        android:id="@+id/listLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
+            android:visibility="visible"
+            android:id="@+id/progress"
+            android:layout_gravity="center"
+            app:mlpb_progress_stoke_width="3dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"/>
+
+        <ListView
+            android:id="@+id/device_list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </LinearLayout>

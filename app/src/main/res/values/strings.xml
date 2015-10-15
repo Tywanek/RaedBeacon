@@ -1,9 +1,8 @@
 <resources>
-    <string name="app_name">RaedBeacon</string>
+    <string name="app_name">AutismBaecons</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
 
     <string name="record_sound">record sound</string>
     <string name="stop_record">stop record</string>
@@ -13,5 +12,6 @@
 
     <string name="empty_file_name">Set beacon name</string>
     <string name="enter_beacon_name">Enter beacon name</string>
+    <string name="enter_pin_code_hint">Enter pin code</string>
     <string name="title_activity_main2">Main2Activity</string>
 </resources>

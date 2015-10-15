@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.almusawi.raed.raedbeacon.R;
@@ -38,6 +39,7 @@ public class BeaconsSearchActivity extends Activity {
   private boolean timerFinish = true;
   private Timer timer;
   private TimerTask timerTask;
+  private LinearLayout mainLayout;
 
 
   @Override
@@ -45,7 +47,10 @@ public class BeaconsSearchActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
     //set ProgreBar
+    mainLayout = (LinearLayout)findViewById(R.id.mainLayout);
+    mainLayout.setBackground(getResources().getDrawable(R.drawable.abcb));
     ImageView logo = (ImageView)findViewById(R.id.logo);
+
     logo.setImageDrawable(getResources().getDrawable(R.drawable.logo));
     logo.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -71,9 +76,10 @@ public class BeaconsSearchActivity extends Activity {
           public void run() {
             if (beacons.size() > 0 && !((RaedBeaconApplication) getApplicationContext()).isDetailsVisible()
                     && (Utils.computeAccuracy(beacons.get(0)) < 1.5 && timerFinish)) {
+
               ((RaedBeaconApplication) getApplicationContext()).setDetailsVisible(true);
+
               intent.putExtra(BeaconsSearchActivity.FOUND_BEACON, beacons.get(0));
-              //startActivity(intent);
               startActivityForResult(intent, DETAIL_ACTIVITY);
             }
 
@@ -142,7 +148,7 @@ public class BeaconsSearchActivity extends Activity {
       if (resultCode == Activity.RESULT_OK) {
         connectToService();
       } else {
-        //Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
       }
     }
     if(requestCode == DETAIL_ACTIVITY){
